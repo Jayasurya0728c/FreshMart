@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ProductDetailModal({
   product,
@@ -9,6 +9,12 @@ export default function ProductDetailModal({
   onUpdateCart,
   onToggleWishlist
 }) {
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [product]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -30,8 +36,13 @@ export default function ProductDetailModal({
 
         <div className="product-detail-grid">
           <div className="product-detail-media">
-            {product.image ? (
-              <img src={product.image} alt={product.name} className="product-detail-img" />
+            {product.image && !imgError ? (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="product-detail-img"
+                onError={() => setImgError(true)}
+              />
             ) : (
               <div className="product-detail-placeholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="64" height="64" opacity="0.35">

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export default function ProductCard({
   product,
   catName,
@@ -7,6 +9,7 @@ export default function ProductCard({
   onToggleWishlist,
   onViewDetail
 }) {
+  const [imgError, setImgError] = useState(false);
   const isWished = wishlist.includes(product.id);
 
   return (
@@ -26,8 +29,14 @@ export default function ProductCard({
       </button>
 
       <div className="product-card-clickable" onClick={() => onViewDetail && onViewDetail(product)}>
-        {product.image ? (
-          <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
+        {product.image && !imgError ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="product-img"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
         ) : (
           <div className="product-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="40" height="40" opacity="0.35">

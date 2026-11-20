@@ -88,8 +88,19 @@ function App() {
         axios.get(`${API}/products/`),
         axios.get(`${API}/promo/`).catch(() => ({ data: null }))
       ]);
+      const baseUrl = API.replace(/\/api$/, '');
+      const normalizeProduct = (p) => {
+        if (p.image && !p.image.startsWith('http://') && !p.image.startsWith('https://')) {
+          return {
+            ...p,
+            image: `${baseUrl}${p.image.startsWith('/') ? '' : '/'}${p.image}`
+          };
+        }
+        return p;
+      };
+
       setCategories(catRes.data);
-      setProducts(prodRes.data);
+      setProducts(Array.isArray(prodRes.data) ? prodRes.data.map(normalizeProduct) : []);
       if (promoRes?.data) {
         setPromoOffer(promoRes.data);
       }
