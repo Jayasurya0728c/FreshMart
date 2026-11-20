@@ -113,8 +113,18 @@ export default function AdminPage({
       setProdDesc('');
       setProdImage(null);
       setShowAddProduct(false);
-    } catch {
-      notify('Failed to save product. Please check input values.');
+    } catch (err) {
+      const data = err?.response?.data;
+      let msg = 'Failed to save product.';
+      if (typeof data === 'object' && data !== null) {
+        const fieldErrors = Object.entries(data)
+          .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+          .join(' | ');
+        if (fieldErrors) msg = `Failed: ${fieldErrors}`;
+      } else if (err?.message) {
+        msg = `Failed: ${err.message}`;
+      }
+      notify(msg);
     }
   };
 
@@ -133,8 +143,18 @@ export default function AdminPage({
       });
       notify(`Product "${editingProduct.name}" updated.`);
       setEditingProduct(null);
-    } catch {
-      notify('Failed to update product.');
+    } catch (err) {
+      const data = err?.response?.data;
+      let msg = 'Failed to update product.';
+      if (typeof data === 'object' && data !== null) {
+        const fieldErrors = Object.entries(data)
+          .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+          .join(' | ');
+        if (fieldErrors) msg = `Failed: ${fieldErrors}`;
+      } else if (err?.message) {
+        msg = `Failed: ${err.message}`;
+      }
+      notify(msg);
     }
   };
 

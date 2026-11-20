@@ -120,6 +120,24 @@ function App() {
     fetchData();
   }, [fetchData]);
 
+  // Intercept 401s globally to notify expired session
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 && token) {
+          localStorage.removeItem('token');
+          setToken('');
+          setUser(null);
+          setPage('login');
+          notify('Your session has expired. Please sign in again.');
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => axios.interceptors.response.eject(interceptor);
+  }, [token]);
+
   // Persist cart and wishlist
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
