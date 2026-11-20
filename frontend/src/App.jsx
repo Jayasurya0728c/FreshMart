@@ -12,7 +12,10 @@ import AuthPage from './components/AuthPage';
 import ProductDetailModal from './components/ProductDetailModal';
 import Toast from './components/Toast';
 
-const rawApi = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+let rawApi = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+if (!rawApi.includes('.') && !rawApi.includes('localhost')) {
+  rawApi = `${rawApi}.onrender.com`;
+}
 const API = (rawApi.startsWith('http') ? rawApi : `https://${rawApi}`).replace(/\/+$/, '').replace(/\/api$/, '') + '/api';
 
 function App() {
