@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function AuthPage({ onLogin, onRegister, setPage }) {
+export default function AuthPage({ onLogin, onRegister, setPage, apiEndpoint }) {
   const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -33,6 +33,8 @@ export default function AuthPage({ onLogin, onRegister, setPage }) {
       const serverErr = err?.response?.data?.error || err?.response?.data?.detail;
       if (serverErr) {
         setErrorMessage(serverErr);
+      } else if (!err?.response) {
+        setErrorMessage(`Cannot connect to backend server (${apiEndpoint || 'API'}). Please check if the backend service is Live on Render.`);
       } else if (isRegistering) {
         setErrorMessage('Could not register account. The username may already be taken.');
       } else {

@@ -444,6 +444,7 @@ function App() {
             onLogin={handleLogin}
             onRegister={handleRegister}
             setPage={setPage}
+            apiEndpoint={API}
           />
         )}
       </main>
