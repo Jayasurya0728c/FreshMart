@@ -12,7 +12,8 @@ import AuthPage from './components/AuthPage';
 import ProductDetailModal from './components/ProductDetailModal';
 import Toast from './components/Toast';
 
-const API = 'http://127.0.0.1:8000/api';
+const rawApi = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const API = (rawApi.startsWith('http') ? rawApi : `https://${rawApi}`).replace(/\/+$/, '').replace(/\/api$/, '') + '/api';
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
